@@ -9,6 +9,8 @@ from knox.models import AuthToken
 from knox.views import LogoutView as KnoxLogoutView
 from django_filters.rest_framework import DjangoFilterBackend
 from decouple import config
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 import boto3
 from botocore.exceptions import ClientError
@@ -224,16 +226,11 @@ class SignUpFormAPI(generics.GenericAPIView):
 
         if name and email and project and message:
             subject = ' NEW CLIENT SIGNUP \u2014 {n}'.format(n=name)
-            body = """
-            Name: {n}
-            Email: {e}
-            Type of project: {p}
-            Message:
-            {m}
-            """.format(n=name, e=email, p=project, m=message)
+            html_message = render_to_string('email.html', serializer.validated_data)
+            plain_message = strip_tags(html_message)
 
             try:
-                mail_admins(subject, body)
+                mail_admins(subject, plain_message, html_message=html_message)
             except BadHeaderError:
                 return Response('Invalid header found.')
             return Response('Message sent successfully.')
