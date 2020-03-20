@@ -30,11 +30,11 @@ class Video(models.Model):
 
     subtitle = models.CharField(_('subtitle'), max_length=255, blank=True)
 
-    thumbnail_url = models.CharField(_('thumbnail_url'), max_length=255, blank=True)
+    thumbnail_url = models.TextField(_('thumbnail_url'), blank=True)
 
     title = models.CharField(_('title'), max_length=255)
 
-    video_url = models.CharField(_('video_url'), max_length=255)
+    video_url = models.TextField(_('video_url'))
 
     class Meta:
         ordering = ['-published_at']
