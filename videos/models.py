@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 
@@ -26,7 +27,7 @@ class Video(models.Model):
 
     published_at = models.DateTimeField(_('published_at'), blank=True, null=True)
 
-    slug = models.SlugField(_('slug'), unique=True, null=False, max_length=255)
+    slug = models.SlugField(_('slug'), unique=True, null=False, blank=True, max_length=255)
 
     subtitle = models.CharField(_('subtitle'), max_length=255, blank=True)
 
@@ -44,3 +45,8 @@ class Video(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
