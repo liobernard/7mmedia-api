@@ -57,20 +57,6 @@ class VideoAPI(viewsets.ModelViewSet):
         else:
             raise ValidationError('Unable to create object with provided credentials.')
 
-    def perform_update(self, serializer):
-        user = self.request.user
-        if user and user.is_active and user.is_staff:
-            serializer.save()
-        else:
-            raise ValidationError('Unable to update object with provided credentials.')
-
-    def perform_destroy(self, instance):
-        user = self.request.user
-        if user and user.is_active and user.is_staff:
-            instance.delete()
-        else:
-            raise ValidationError('Unable to delete object with provided credentials.')
-
 
 class UserAPI(generics.RetrieveAPIView):
     permission_classes = [IsAdminUser]
