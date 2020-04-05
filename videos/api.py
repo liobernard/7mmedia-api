@@ -58,14 +58,6 @@ class VideoAPI(viewsets.ModelViewSet):
             raise ValidationError('Unable to create object with provided credentials.')
 
 
-class UserAPI(generics.RetrieveAPIView):
-    permission_classes = [IsAdminUser]
-    serializer_class = UserSerializer
-
-    def get_object(self):
-        return self.request.user
-
-
 class LoginAPI(generics.GenericAPIView):
     serializer_class = LoginUserSerializer
 
