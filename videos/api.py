@@ -1,5 +1,5 @@
 import logging
-from rest_framework import filters, generics, viewsets
+from rest_framework import filters, generics, viewsets, views
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
@@ -114,7 +114,7 @@ class SignedUrlAPI(generics.GenericAPIView):
         return Response({ 'url': response['url'], 'fields': response['fields'] })
 
 
-class ListThumbnailsAPI(generics.GenericAPIView):
+class ListThumbnailsAPI(views.APIView):
     permission_classes = [IsAdminUser]
 
     def list_thumbnails(self):
@@ -152,7 +152,7 @@ class ListThumbnailsAPI(generics.GenericAPIView):
         return Response(self.list_thumbnails())
 
 
-class ListFilmsAPI(generics.GenericAPIView):
+class ListFilmsAPI(views.APIView):
     permission_classes = [IsAdminUser]
 
     def list_films(self):
