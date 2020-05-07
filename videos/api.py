@@ -137,11 +137,7 @@ class ListThumbnailsAPI(views.APIView):
 
         return list(map(
             lambda obj:
-                'https://{bucket}.s3.{region}.amazonaws.com/{key}'.format(
-                    bucket=AWS_STORAGE_BUCKET_NAME,
-                    region=AWS_S3_REGION_NAME,
-                    key=obj['Key']
-                ),
+                'https://assets.7mmedia.online/{key}'.format(key=obj['Key']),
             filter(
                 lambda obj: obj['Key'] is not 'media/images/film_thumbnails/',
                 filter(lambda obj: obj['Size'] > 0, response)
@@ -175,11 +171,7 @@ class ListFilmsAPI(views.APIView):
 
         return list(map(
             lambda obj:
-                'https://{bucket}.s3.{region}.amazonaws.com/{key}'.format(
-                    bucket=AWS_STORAGE_BUCKET_NAME,
-                    region=AWS_S3_REGION_NAME,
-                    key=obj['Key']
-                ),
+                'https://assets.7mmedia.online/{key}'.format(key=obj['Key']),
             filter(
                 lambda obj: obj['Key'] is not 'media/videos/films/',
                 filter(lambda obj: obj['Size'] > 0, response)
