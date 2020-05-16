@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'videos.apps.VideosConfig',
+    'info.apps.InfoConfig',
+    'solo.apps.SoloAppConfig',
     'corsheaders',
     'rest_framework',
     'django_filters',
