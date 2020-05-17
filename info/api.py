@@ -26,12 +26,6 @@ class InfoAPI(GenericAPIView):
         serializer = self.get_serializer(info)
         return Response(serializer.data)
 
-    def put(self, request, *args, **kwargs):
-        info = self.get_info()
-        serializer = self.get_serializer(info, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
 
 class HomeInfoAPI(InfoAPI):
     info = HomeInfo
@@ -41,6 +35,22 @@ class HomeInfoAPI(InfoAPI):
             return PutHomeInfoSerializer
         return HomeInfoSerializer
 
+    def put(self, request, *args, **kwargs):
+        info = self.get_info()
+        serializer = self.get_serializer(info, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        home_info = serializer.validated_data
+        context = self.get_serializer_context()
+        return Response(HomeInfoSerializer(home_info, context=context).data)
+
 class AboutInfoAPI(InfoAPI):
     info = AboutInfo
     serializer_class = AboutInfoSerializer
+
+    def put(self, request, *args, **kwargs):
+        info = self.get_info()
+        serializer = self.get_serializer(info, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
