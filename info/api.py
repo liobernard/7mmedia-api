@@ -2,7 +2,11 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 
 from .models import HomeInfo, AboutInfo
-from .serializers import HomeInfoSerializer, AboutInfoSerializer
+from .serializers import (
+    HomeInfoSerializer,
+    PutHomeInfoSerializer,
+    AboutInfoSerializer,
+)
 from utils.permissions import IsAdminOrReadOnly
 
 
@@ -26,12 +30,16 @@ class InfoAPI(GenericAPIView):
         info = self.get_info()
         serializer = self.get_serializer(info, data=request.data)
         serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
+        serializer.save()
         return Response(serializer.data)
 
 class HomeInfoAPI(InfoAPI):
     info = HomeInfo
-    serializer_class = HomeInfoSerializer
+    
+    def get_serializer_class(self):
+        if self.request.method == 'PUT':
+            return PutHomeInfoSerializer
+        return HomeInfoSerializer
 
 class AboutInfoAPI(InfoAPI):
     info = AboutInfo

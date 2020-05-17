@@ -6,13 +6,12 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from .filters import VideoFilter
 from .models import Video
-from .serializers import VideoSerializer
+from .serializers import VideoSerializer, ThumbnailVideoSerializer
 from utils.permissions import IsAdminOrReadOnly
 
 
 class VideoAPI(ModelViewSet):
     permission_classes = [IsAdminOrReadOnly]
-    serializer_class = VideoSerializer
     filter_backends = (DjangoFilterBackend, OrderingFilter,)
     filterset_class = VideoFilter
     lookup_field = 'slug'
@@ -24,6 +23,12 @@ class VideoAPI(ModelViewSet):
         if user and user.is_active and user.is_staff:
             return Video.objects.all()
         return Video.objects.filter(published_at__isnull=False)
+
+    def get_serializer_class(self):
+        thumbnail = self.request.query_params.get('thumbnail', '')
+        if thumbnail.lower() == 'true':
+            return ThumbnailVideoSerializer
+        return VideoSerializer
 
     def perform_create(self, serializer):
         user = self.request.user
