@@ -22,6 +22,9 @@ AWS_CDN_DOMAIN          = config('AWS_CDN_DOMAIN')
 class S3API(APIView):
     permission_classes = [IsAdminUser]
 
+    def get_content_types(self):
+        return [content_type for content_type in self.content_types]
+
     def get_s3_client(self):
         return boto3.client(
             's3',
@@ -41,7 +44,7 @@ class S3API(APIView):
                 Prefix=self.prefix
             )['Contents']
         except KeyError as e:
-            raise NotFound(detail='{} not found.'.format(e))
+            raise NotFound(detail='{} not found'.format(e))
         except ClientError as e:
             raise NotFound(detail='Error: {}'.format(e))
 
@@ -56,14 +59,12 @@ class S3API(APIView):
     def validate_file(self, file):
         magic_type = magic.from_buffer(file.read(2048), mime=True)
         file.seek(0)
-
-        if magic_type != self.content_type:
-            main, sub = self.content_type.split('/', 1)
-            if (main != magic_type.split('/')[0] and sub != '*'):
-                raise ValidationError(
-                    'Error: Only {t} types supported. You '
-                    'submitted {s}.'.format(t=self.content_type, s=magic_type)
-                )
+        valid_types = self.get_content_types()
+        if magic_type not in valid_types:
+            raise ValidationError(
+                'Error: Invalid filetype. Must be one of {t}. You '
+                'submitted {s}'.format(t=str(valid_types), s=magic_type)
+            )
         return file
 
     def create_presigned_post(self, object_name):
@@ -88,7 +89,7 @@ class S3API(APIView):
 
     def post(self, request, *args, **kwargs):
         if 'file' not in request.data:
-            raise ParseError('Empty content.')
+            raise ParseError('Empty content')
 
         unvalidated = request.data['file']
         file        = self.validate_file(unvalidated)
@@ -100,19 +101,19 @@ class S3API(APIView):
 
 class S3VideosAPI(S3API):
     prefix          = 'media/videos/'
-    content_type    = 'video/mp4'
+    content_types   = ('video/mp4',)
 
 
 class S3FilmsAPI(S3API):
     prefix          = 'media/videos/films/'
-    content_type    = 'video/mp4'
+    content_types   = ('video/mp4',)
 
 
 class S3ImagesAPI(S3API):
     prefix          = 'media/images/'
-    content_type    = 'image/*'
+    content_types   = ('image/jpeg', 'image/png', 'image/gif',)
 
 
 class S3FilmThumbnailsAPI(S3API):
     prefix          = 'media/images/film_thumbnails/'
-    content_type    = 'image/*'
+    content_types   = ('image/jpeg', 'image/png', 'image/gif',)
