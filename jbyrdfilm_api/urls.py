@@ -9,10 +9,10 @@ from s3 import endpoints as s3
 from sign_up import endpoints as sign_up
 
 urlpatterns = [
-    re_path(r'^', include(videos)),
-    re_path(r'^', include(info)),
-    re_path(r'^', include(auth)),
-    re_path(r'^', include(s3)),
-    re_path(r'^', include(sign_up)),
+    re_path(r'^api/', include(videos)),
+    re_path(r'^api/', include(info)),
+    re_path(r'^api/', include(auth)),
+    re_path(r'^api/', include(s3)),
+    re_path(r'^api/', include(sign_up)),
     re_path(r'^api/admin/', admin.site.urls),
 ]

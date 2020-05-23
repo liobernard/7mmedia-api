@@ -3,9 +3,9 @@ from rest_framework import routers
 
 from .api import VideoAPI
 
-router = routers.DefaultRouter()
+router = routers.SimpleRouter()
 router.register('videos', VideoAPI, 'videos')
 
 urlpatterns = [
-    re_path(r'^api/', include(router.urls)),
+    re_path('', include(router.urls)),
 ]
