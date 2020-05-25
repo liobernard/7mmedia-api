@@ -23,8 +23,6 @@ class Video(models.Model):
 
     extra_field_5 = models.CharField(_('extra_field_5'), max_length=255, blank=True)
 
-    featured = models.BooleanField(_('featured'), default=False)
-
     published_at = models.DateTimeField(_('published_at'), blank=True, null=True)
 
     slug = models.SlugField(_('slug'), unique=True, null=False, blank=True, max_length=255)

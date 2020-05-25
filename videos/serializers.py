@@ -14,7 +14,6 @@ class VideoSerializer(ModelSerializer):
             'extra_field_3',
             'extra_field_4',
             'extra_field_5',
-            'featured',
             'published_at',
             'slug',
             'subtitle',
