@@ -47,7 +47,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'jbyrdfilm_api.urls'
+ROOT_URLCONF = '7mmedia_api.urls'
 
 TEMPLATES = [
     {
@@ -65,7 +65,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'jbyrdfilm_api.wsgi.application'
+WSGI_APPLICATION = '7mmedia_api.wsgi.application'
 
 DATABASE_URL = config('DATABASE_URL', default='', cast=str)
 
