@@ -2,7 +2,7 @@ Django==3.0.7
 django-cors-headers==3.3.0
 django-filter==2.3.0
 django-rest-knox==4.1.0
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 psycopg2==2.8.5
 python-decouple==3.3
 dj-database-url==0.5.0
